@@ -15,6 +15,7 @@ import InvitationCard from "./components/InvitationCard";
 import BackButton from "./components/BackButton";
 import LanguageToggle from "./components/LanguageToggle";
 import { useTranslation } from "./i18n/LanguageContext";
+import { saveOfficialResponse, saveYesResponse } from "./lib/responses";
 
 const PHASES = {
   INTRO: "intro",
@@ -27,7 +28,7 @@ const PHASES = {
 
 function App() {
   const reducedMotion = useReducedMotion();
-  const { t } = useTranslation();
+  const { t, lang } = useTranslation();
 
   const [phase, setPhase] = useState(PHASES.INTRO);
   const [celebrationStep, setCelebrationStep] = useState(0);
@@ -85,14 +86,19 @@ function App() {
     setConfetti(true);
     setHeartBurst(true);
     setFunnyMessage(null);
-  }, []);
+    saveYesResponse(lang);
+  }, [lang]);
 
-  const handleOfficial = useCallback(() => {
-    setPhase(PHASES.OFFICIAL);
-    setFullScreenCelebration(true);
-    setConfetti(true);
-    setHeartBurst(true);
-  }, []);
+  const handleOfficial = useCallback(
+    ({ pickIds, picks, time }) => {
+      setPhase(PHASES.OFFICIAL);
+      setFullScreenCelebration(true);
+      setConfetti(true);
+      setHeartBurst(true);
+      saveOfficialResponse({ lang, pickIds, picks, time });
+    },
+    [lang],
+  );
 
   const handleBack = useCallback(() => {
     setFunnyMessage(null);

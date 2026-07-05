@@ -49,7 +49,7 @@ function InvitationCard({ visible, onOfficial }) {
     const picks = t.invitation.details
       .filter((d) => selectedIds.has(d.id))
       .map((d) => d.label);
-    onOfficial?.({ picks, time: selectedTime });
+    onOfficial?.({ pickIds: [...selectedIds], picks, time: selectedTime });
   };
 
   if (!visible) return null;
